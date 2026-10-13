@@ -1,0 +1,26 @@
+# 基础设施：MySQL + Redis（后续第 5 周再补 app 服务，做到真正一键启动）
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: admin-template-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: admin_template
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  redis:
+    image: redis:7-alpine
+    container_name: admin-template-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mysql-data:
+  redis-data:
