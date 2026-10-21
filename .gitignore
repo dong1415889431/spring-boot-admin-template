@@ -8,3 +8,7 @@ logs/
 *.log
 application-local.yml
 任务时间线.xlsx
+
+# asciinema demo artifacts (local-only; demo.gif is force-added when publishing in Week 7)
+demo.cast
+demo.gif
