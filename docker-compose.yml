@@ -1,4 +1,6 @@
-# 基础设施：MySQL + Redis（后续第 5 周再补 app 服务，做到真正一键启动）
+# 一键启动：MySQL + Redis + 应用（第 5 周完成）
+# 用法：docker compose up -d --build
+# 首次启动会自动建表 + 写入种子数据（schema.sql 挂载到 MySQL 初始化目录）
 services:
   mysql:
     image: mysql:8.0
@@ -11,7 +13,14 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+      # 首次初始化时自动执行建表 + 种子数据
+      - ./src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   redis:
     image: redis:7-alpine
@@ -20,6 +29,31 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    container_name: admin-template-app
+    ports:
+      - "8080:8080"
+    environment:
+      # 容器内通过服务名访问 MySQL/Redis（覆盖 application.yml 的 localhost）
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/admin_template?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      # 上线前务必替换为随机长密钥（≥32 字节）
+      JWT_SECRET: docker-change-me-to-a-long-random-secret-key-32-bytes
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   mysql-data:

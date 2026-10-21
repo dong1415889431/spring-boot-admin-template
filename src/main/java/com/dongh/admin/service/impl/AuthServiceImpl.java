@@ -9,6 +9,7 @@ import com.dongh.admin.entity.User;
 import com.dongh.admin.mapper.PermissionMapper;
 import com.dongh.admin.security.JwtUtil;
 import com.dongh.admin.service.AuthService;
+import com.dongh.admin.service.RedisService;
 import com.dongh.admin.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,19 +22,25 @@ import java.util.List;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    /** 登录态缓存 key 前缀 */
+    private static final String LOGIN_KEY_PREFIX = "login:user:";
+
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final PermissionMapper permissionMapper;
+    private final RedisService redisService;
 
     public AuthServiceImpl(UserService userService,
                            PasswordEncoder passwordEncoder,
                            JwtUtil jwtUtil,
-                           PermissionMapper permissionMapper) {
+                           PermissionMapper permissionMapper,
+                           RedisService redisService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.permissionMapper = permissionMapper;
+        this.redisService = redisService;
     }
 
     @Override
@@ -71,6 +78,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse.UserInfo getCurrentUser(String username) {
+        // 优先读登录态缓存，miss 再查库
+        AuthResponse.UserInfo cached = redisService.get(LOGIN_KEY_PREFIX + username, AuthResponse.UserInfo.class);
+        if (cached != null) {
+            return cached;
+        }
         User user = userService.getByUsername(username);
         if (user == null) {
             throw new BusinessException(ResultCode.NOT_FOUND, "用户不存在");
@@ -78,15 +90,23 @@ public class AuthServiceImpl implements AuthService {
         return toUserInfo(user);
     }
 
+    @Override
+    public void logout(String username) {
+        redisService.delete(LOGIN_KEY_PREFIX + username);
+    }
+
     private AuthResponse buildAuthResponse(User user) {
         // 登录/刷新时实时查询用户权限编码，写入 access token
         List<String> permissions = permissionMapper.selectPermissionCodesByUserId(user.getId());
+        AuthResponse.UserInfo userInfo = toUserInfo(user);
+        // 登录态缓存：缓存用户信息，TTL 与 access token 一致
+        redisService.set(LOGIN_KEY_PREFIX + user.getUsername(), userInfo, jwtUtil.getAccessExpiration());
         return AuthResponse.builder()
                 .accessToken(jwtUtil.generateAccessToken(user.getUsername(), permissions))
                 .refreshToken(jwtUtil.generateRefreshToken(user.getUsername()))
                 .tokenType("Bearer")
                 .expiresIn(jwtUtil.getAccessExpiration())
-                .user(toUserInfo(user))
+                .user(userInfo)
                 .build();
     }
 

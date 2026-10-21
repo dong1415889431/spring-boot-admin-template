@@ -16,4 +16,6 @@ public interface AuthService {
     AuthResponse refresh(String refreshToken);
 
     AuthResponse.UserInfo getCurrentUser(String username);
+
+    void logout(String username);
 }

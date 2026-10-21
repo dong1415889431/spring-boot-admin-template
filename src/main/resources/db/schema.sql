@@ -118,3 +118,39 @@ INSERT IGNORE INTO `user` (`username`, `password`, `nickname`, `email`, `status`
 INSERT IGNORE INTO `user_role` (`user_id`, `role_id`)
 SELECT u.id, r.id FROM `user` u JOIN `role` r
 WHERE u.username = 'admin' AND r.code = 'ADMIN';
+
+
+-- ============================================================
+-- 第 5 周：通用 CRUD 示例（文章管理）+ 权限 + 种子数据
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS `article` (
+    `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `title`      VARCHAR(128) NOT NULL                COMMENT '标题',
+    `content`    TEXT                                  COMMENT '内容',
+    `author`     VARCHAR(64)  DEFAULT NULL            COMMENT '作者',
+    `status`     TINYINT      NOT NULL DEFAULT 1      COMMENT '状态：1 发布，0 草稿',
+    `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted`    TINYINT      NOT NULL DEFAULT 0      COMMENT '逻辑删除：0 未删除，1 已删除',
+    PRIMARY KEY (`id`),
+    KEY `idx_title` (`title`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '文章表（通用 CRUD 示例）';
+
+-- 文章权限
+INSERT IGNORE INTO `permission` (`name`, `code`, `type`, `sort`) VALUES
+('文章列表', 'article:list', 'API', 13),
+('文章新增', 'article:create', 'API', 14),
+('文章编辑', 'article:update', 'API', 15),
+('文章删除', 'article:delete', 'API', 16);
+
+-- 重新给 ADMIN 分配所有权限（含新增的 article 权限，幂等）
+INSERT IGNORE INTO `role_permission` (`role_id`, `permission_id`)
+SELECT r.id, p.id FROM `role` r JOIN `permission` p
+WHERE r.code = 'ADMIN';
+
+-- 示例文章
+INSERT IGNORE INTO `article` (`id`, `title`, `content`, `author`, `status`) VALUES
+(1, 'Spring Boot 后台管理模板使用指南', '这是一篇示例文章，展示通用 CRUD 模块的用法。', 'admin', 1),
+(2, '如何扩展自己的业务模块', '复制 article 模块，改表名和字段即可快速扩展商品、订单等模块。', 'admin', 1),
+(3, '草稿：RBAC 权限设计思路', '尚未发布的草稿。', 'admin', 0);

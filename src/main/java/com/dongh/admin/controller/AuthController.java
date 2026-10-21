@@ -55,4 +55,12 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Result.success(authService.getCurrentUser(authentication.getName()));
     }
+
+    @Operation(summary = "退出登录（清除登录态缓存，需携带 token）")
+    @PostMapping("/logout")
+    public Result<Void> logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        authService.logout(authentication.getName());
+        return Result.success();
+    }
 }
