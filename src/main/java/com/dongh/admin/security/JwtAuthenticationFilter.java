@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * JWT 无状态鉴权过滤器：解析请求头中的 Bearer token，
- * 校验通过后加载权限编码写入 SecurityContext，供 @PreAuthorize 使用。
+ * Stateless JWT authentication filter: parses the Bearer token from the request header,
+ * and after successful validation loads the permission codes into the SecurityContext
+ * for use by @PreAuthorize.
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

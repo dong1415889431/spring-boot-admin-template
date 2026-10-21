@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 用户分配角色请求
+ * User role assignment request.
  */
 @Data
 public class UserRoleRequest {

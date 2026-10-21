@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 角色分配权限请求
+ * Role permission assignment request.
  */
 @Data
 public class RolePermissionRequest {

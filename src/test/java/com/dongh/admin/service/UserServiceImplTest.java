@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 /**
- * 用户服务单元测试（Mockito mock 依赖，无需数据库）
+ * User service unit test (mocks dependencies with Mockito, no database required)
  */
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -39,7 +39,7 @@ class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         userService = new UserServiceImpl(userRoleMapper);
-        // 手动注入继承自 ServiceImpl 的 baseMapper 字段（MyBatis-Plus 内部依赖它）
+        // Manually inject the baseMapper field inherited from ServiceImpl (MyBatis-Plus depends on it internally)
         ReflectionTestUtils.setField(userService, "baseMapper", userMapper);
     }
 
@@ -48,7 +48,7 @@ class UserServiceImplTest {
         RegisterRequest request = new RegisterRequest();
         request.setUsername("testuser");
         request.setPassword("123456");
-        request.setNickname("测试用户");
+        request.setNickname("Test User");
         request.setEmail("test@example.com");
 
         User user = userService.register(request, passwordEncoder);

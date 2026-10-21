@@ -4,18 +4,18 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 文章创建 / 更新请求
+ * Article create / update request.
  */
 @Data
 public class ArticleRequest {
 
-    @NotBlank(message = "标题不能为空")
+    @NotBlank(message = "Title is required")
     private String title;
 
     private String content;
 
     private String author;
 
-    /** 状态：1 发布，0 草稿 */
+    /** Status: 1 published, 0 draft. */
     private Integer status;
 }

@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 文章管理接口（通用 CRUD 示例）
+ * Article management endpoints (generic CRUD example)
  */
-@Tag(name = "文章管理", description = "通用 CRUD 示例：分页 / 详情 / 增删改")
+@Tag(name = "Article Management", description = "Generic CRUD example: pagination / detail / create, update, delete")
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
@@ -33,7 +33,7 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @Operation(summary = "分页查询文章")
+    @Operation(summary = "Paginated article query")
     @PreAuthorize("hasAuthority('article:list')")
     @GetMapping
     public Result<IPage<Article>> page(@RequestParam(defaultValue = "1") long page,
@@ -43,28 +43,28 @@ public class ArticleController {
         return Result.success(articleService.pageArticles(page, size, keyword, status));
     }
 
-    @Operation(summary = "文章详情")
+    @Operation(summary = "Article detail")
     @PreAuthorize("hasAuthority('article:list')")
     @GetMapping("/{id}")
     public Result<Article> detail(@PathVariable Long id) {
         return Result.success(articleService.getById(id));
     }
 
-    @Operation(summary = "新增文章")
+    @Operation(summary = "Create article")
     @PreAuthorize("hasAuthority('article:create')")
     @PostMapping
     public Result<Article> create(@Valid @RequestBody ArticleRequest request) {
         return Result.success(articleService.createArticle(request));
     }
 
-    @Operation(summary = "编辑文章")
+    @Operation(summary = "Update article")
     @PreAuthorize("hasAuthority('article:update')")
     @PutMapping("/{id}")
     public Result<Article> update(@PathVariable Long id, @Valid @RequestBody ArticleRequest request) {
         return Result.success(articleService.updateArticle(id, request));
     }
 
-    @Operation(summary = "删除文章")
+    @Operation(summary = "Delete article")
     @PreAuthorize("hasAuthority('article:delete')")
     @DeleteMapping("/{id}")
     public Result<Void> delete(@PathVariable Long id) {

@@ -6,12 +6,12 @@ import com.dongh.admin.entity.Permission;
 import java.util.List;
 
 /**
- * 权限服务
+ * Permission service
  */
 public interface PermissionService extends IService<Permission> {
 
     /**
-     * 查询全部权限（按排序号升序）
+     * Query all permissions (ascending by sort order)
      */
     List<Permission> listAll();
 }

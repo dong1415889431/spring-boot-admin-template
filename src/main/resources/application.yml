@@ -31,13 +31,13 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
-# JWT 配置（第 3 周认证模块）
+# JWT configuration (Week 3 authentication module)
 jwt:
-  # 上线前务必替换为随机长密钥（≥32 字节）
+  # Replace with a long random key before going live (≥32 bytes)
   secret: change-me-to-a-long-random-secret-key-please-32-bytes
-  # access token 有效期（秒），默认 24 小时
+  # access token TTL (seconds), default 24 hours
   expiration: 86400
-  # refresh token 有效期（秒），默认 7 天
+  # refresh token TTL (seconds), default 7 days
   refresh-expiration: 604800
 
 springdoc:

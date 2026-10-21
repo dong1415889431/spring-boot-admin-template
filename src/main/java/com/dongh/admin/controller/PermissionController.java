@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 权限管理接口（RBAC 权限控制）
+ * Permission management endpoints (RBAC permission control)
  */
-@Tag(name = "权限管理", description = "权限列表查询")
+@Tag(name = "Permission Management", description = "Permission list query")
 @RestController
 @RequestMapping("/api/permissions")
 public class PermissionController {
@@ -26,7 +26,7 @@ public class PermissionController {
         this.permissionService = permissionService;
     }
 
-    @Operation(summary = "权限列表")
+    @Operation(summary = "Permission list")
     @PreAuthorize("hasAuthority('permission:list')")
     @GetMapping
     public Result<List<Permission>> list() {

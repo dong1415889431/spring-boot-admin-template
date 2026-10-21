@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 用户列表视图对象（含角色信息）
+ * User list view object (includes role info).
  */
 @Data
 public class UserVO {
@@ -19,14 +19,14 @@ public class UserVO {
 
     private String email;
 
-    /** 状态：1 启用，0 禁用 */
+    /** Status: 1 enabled, 0 disabled. */
     private Integer status;
 
     private LocalDateTime createdAt;
 
-    /** 拥有的角色 ID 列表 */
+    /** Role IDs assigned to the user. */
     private List<Long> roleIds;
 
-    /** 拥有的角色名列表 */
+    /** Role names assigned to the user. */
     private List<String> roleNames;
 }

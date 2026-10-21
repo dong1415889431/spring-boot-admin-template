@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * BCrypt 密码编码器单元测试
+ * BCrypt password encoder unit test
  */
 class PasswordEncoderTest {
 

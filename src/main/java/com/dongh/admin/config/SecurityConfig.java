@@ -19,10 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 
 /**
- * 安全配置（第 3 周：JWT 无状态鉴权）
+ * Security configuration (Week 3: stateless JWT authentication).
  *
- * 放行：认证接口、健康检查、Swagger 文档；
- * 其余接口需要携带有效 access token。
+ * Public: auth endpoints, health check, and Swagger docs;
+ * all other endpoints require a valid access token.
  */
 @Configuration
 @EnableWebSecurity

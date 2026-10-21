@@ -3,7 +3,7 @@ package com.dongh.admin.common;
 import lombok.Data;
 
 /**
- * 统一返回结构
+ * Unified response structure.
  */
 @Data
 public class Result<T> {

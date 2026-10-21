@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 
 /**
- * 用户服务
+ * User service
  */
 public interface UserService extends IService<User> {
 
@@ -21,7 +21,7 @@ public interface UserService extends IService<User> {
 
     User register(RegisterRequest request, PasswordEncoder passwordEncoder);
 
-    /** 分页查询用户（关键字模糊匹配用户名/昵称/邮箱） */
+    /** Paginated user query (keyword fuzzy-matches username/nickname/email) */
     IPage<UserVO> pageUsers(long page, long size, String keyword);
 
     void updateUser(Long id, UserUpdateRequest request);
@@ -30,7 +30,7 @@ public interface UserService extends IService<User> {
 
     void deleteUser(Long id);
 
-    /** 重新分配用户角色（覆盖式） */
+    /** Reassign user roles (full overwrite) */
     void assignRoles(Long userId, List<Long> roleIds);
 
     List<Long> getRoleIds(Long userId);

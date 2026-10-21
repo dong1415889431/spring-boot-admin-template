@@ -8,12 +8,12 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 权限 Mapper
+ * Permission mapper.
  */
 public interface PermissionMapper extends BaseMapper<Permission> {
 
     /**
-     * 查询用户拥有的全部权限编码（通过 用户→角色→权限 关联）
+     * Query all permission codes the user has (via user -> role -> permission associations).
      */
     @Select("SELECT DISTINCT p.code FROM permission p " +
             "JOIN role_permission rp ON p.id = rp.permission_id " +

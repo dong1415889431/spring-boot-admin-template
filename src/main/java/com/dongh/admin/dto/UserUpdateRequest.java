@@ -3,7 +3,7 @@ package com.dongh.admin.dto;
 import lombok.Data;
 
 /**
- * 用户更新请求（昵称 / 邮箱）
+ * User update request (nickname / email).
  */
 @Data
 public class UserUpdateRequest {

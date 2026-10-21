@@ -1,7 +1,7 @@
 -- ============================================================
--- 建表脚本（第 3 周：认证模块 + 第 4 周：RBAC 权限模块）
--- 数据库：admin_template（与 application.yml 的 datasource 一致）
--- 执行方式：mysql -uroot -p < schema.sql  （或在客户端手动执行）
+-- Table schema script (DDL) (Week 3: authentication module + Week 4: RBAC permission module)
+-- Database: admin_template (matches the datasource in application.yml)
+-- How to run: mysql -uroot -p < schema.sql  (or run manually in a client)
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS `admin_template`
@@ -11,146 +11,146 @@ CREATE DATABASE IF NOT EXISTS `admin_template`
 USE `admin_template`;
 
 CREATE TABLE IF NOT EXISTS `user` (
-    `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `username`   VARCHAR(64)  NOT NULL                COMMENT '用户名',
-    `password`   VARCHAR(100) NOT NULL                COMMENT '密码（BCrypt 加密）',
-    `nickname`   VARCHAR(64)  DEFAULT NULL            COMMENT '昵称',
-    `email`      VARCHAR(128) DEFAULT NULL            COMMENT '邮箱',
-    `status`     TINYINT      NOT NULL DEFAULT 1      COMMENT '状态：1 启用，0 禁用',
-    `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted`    TINYINT      NOT NULL DEFAULT 0      COMMENT '逻辑删除：0 未删除，1 已删除',
+    `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `username`   VARCHAR(64)  NOT NULL                COMMENT 'username',
+    `password`   VARCHAR(100) NOT NULL                COMMENT 'password (BCrypt-encrypted)',
+    `nickname`   VARCHAR(64)  DEFAULT NULL            COMMENT 'nickname',
+    `email`      VARCHAR(128) DEFAULT NULL            COMMENT 'email',
+    `status`     TINYINT      NOT NULL DEFAULT 1      COMMENT 'status: 1 enabled, 0 disabled',
+    `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
+    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated time',
+    `deleted`    TINYINT      NOT NULL DEFAULT 0      COMMENT 'logical delete: 0 not deleted, 1 deleted',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_username` (`username`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COMMENT = '用户表';
+  COMMENT = 'user table';
 
 
 -- ============================================================
--- 第 4 周：RBAC 权限模块（角色 / 权限 / 关联表）
+-- Week 4: RBAC permission module (roles / permissions / association tables)
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS `role` (
-    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `name`        VARCHAR(64)  NOT NULL                COMMENT '角色名',
-    `code`        VARCHAR(64)  NOT NULL                COMMENT '角色编码，如 ADMIN/USER',
-    `description` VARCHAR(255) DEFAULT NULL            COMMENT '角色描述',
-    `status`      TINYINT      NOT NULL DEFAULT 1      COMMENT '状态：1 启用，0 禁用',
-    `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted`     TINYINT      NOT NULL DEFAULT 0      COMMENT '逻辑删除：0 未删除，1 已删除',
+    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `name`        VARCHAR(64)  NOT NULL                COMMENT 'role name',
+    `code`        VARCHAR(64)  NOT NULL                COMMENT 'role code, e.g. ADMIN/USER',
+    `description` VARCHAR(255) DEFAULT NULL            COMMENT 'role description',
+    `status`      TINYINT      NOT NULL DEFAULT 1      COMMENT 'status: 1 enabled, 0 disabled',
+    `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
+    `updated_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated time',
+    `deleted`     TINYINT      NOT NULL DEFAULT 0      COMMENT 'logical delete: 0 not deleted, 1 deleted',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_code` (`code`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '角色表';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'role table';
 
 CREATE TABLE IF NOT EXISTS `permission` (
-    `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `name`       VARCHAR(64)  NOT NULL                COMMENT '权限名',
-    `code`       VARCHAR(128) NOT NULL                COMMENT '权限编码，如 user:list',
-    `type`       VARCHAR(16)  NOT NULL DEFAULT 'API'  COMMENT '类型：MENU/API/BUTTON',
-    `sort`       INT          NOT NULL DEFAULT 0      COMMENT '排序',
-    `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted`    TINYINT      NOT NULL DEFAULT 0      COMMENT '逻辑删除：0 未删除，1 已删除',
+    `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `name`       VARCHAR(64)  NOT NULL                COMMENT 'permission name',
+    `code`       VARCHAR(128) NOT NULL                COMMENT 'permission code, e.g. user:list',
+    `type`       VARCHAR(16)  NOT NULL DEFAULT 'API'  COMMENT 'type: MENU/API/BUTTON',
+    `sort`       INT          NOT NULL DEFAULT 0      COMMENT 'sort order',
+    `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
+    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated time',
+    `deleted`    TINYINT      NOT NULL DEFAULT 0      COMMENT 'logical delete: 0 not deleted, 1 deleted',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_code` (`code`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '权限表';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'permission table';
 
 CREATE TABLE IF NOT EXISTS `user_role` (
-    `id`      BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `user_id` BIGINT NOT NULL COMMENT '用户 ID',
-    `role_id` BIGINT NOT NULL COMMENT '角色 ID',
+    `id`      BIGINT NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `user_id` BIGINT NOT NULL COMMENT 'user ID',
+    `role_id` BIGINT NOT NULL COMMENT 'role ID',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_user_role` (`user_id`, `role_id`),
     KEY `idx_role_id` (`role_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '用户角色关联表';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'user-role association table';
 
 CREATE TABLE IF NOT EXISTS `role_permission` (
-    `id`            BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `role_id`       BIGINT NOT NULL COMMENT '角色 ID',
-    `permission_id` BIGINT NOT NULL COMMENT '权限 ID',
+    `id`            BIGINT NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `role_id`       BIGINT NOT NULL COMMENT 'role ID',
+    `permission_id` BIGINT NOT NULL COMMENT 'permission ID',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_role_permission` (`role_id`, `permission_id`),
     KEY `idx_permission_id` (`permission_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '角色权限关联表';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'role-permission association table';
 
 
 -- ============================================================
--- 种子数据（幂等，可重复执行）
+-- Seed data (idempotent, safe to run repeatedly)
 -- ============================================================
 
--- 角色
+-- Roles
 INSERT IGNORE INTO `role` (`name`, `code`, `description`, `status`) VALUES
-('管理员', 'ADMIN', '系统管理员，拥有所有权限', 1),
-('普通用户', 'USER', '普通用户', 1);
+('Administrator', 'ADMIN', 'System administrator with all permissions', 1),
+('Regular User', 'USER', 'Regular user', 1);
 
--- 权限
+-- Permissions
 INSERT IGNORE INTO `permission` (`name`, `code`, `type`, `sort`) VALUES
-('用户列表', 'user:list', 'API', 1),
-('用户新增', 'user:create', 'API', 2),
-('用户编辑', 'user:update', 'API', 3),
-('用户删除', 'user:delete', 'API', 4),
-('用户启禁用', 'user:status', 'API', 5),
-('分配角色', 'user:assign-role', 'API', 6),
-('角色列表', 'role:list', 'API', 7),
-('角色新增', 'role:create', 'API', 8),
-('角色编辑', 'role:update', 'API', 9),
-('角色删除', 'role:delete', 'API', 10),
-('分配权限', 'role:assign-permission', 'API', 11),
-('权限列表', 'permission:list', 'API', 12);
+('User List', 'user:list', 'API', 1),
+('User Create', 'user:create', 'API', 2),
+('User Update', 'user:update', 'API', 3),
+('User Delete', 'user:delete', 'API', 4),
+('User Status', 'user:status', 'API', 5),
+('User Assign Role', 'user:assign-role', 'API', 6),
+('Role List', 'role:list', 'API', 7),
+('Role Create', 'role:create', 'API', 8),
+('Role Update', 'role:update', 'API', 9),
+('Role Delete', 'role:delete', 'API', 10),
+('Role Assign Permission', 'role:assign-permission', 'API', 11),
+('Permission List', 'permission:list', 'API', 12);
 
--- 管理员角色 → 所有权限
+-- Administrator role -> all permissions
 INSERT IGNORE INTO `role_permission` (`role_id`, `permission_id`)
 SELECT r.id, p.id FROM `role` r JOIN `permission` p
 WHERE r.code = 'ADMIN';
 
--- 普通用户角色 → 仅用户列表权限（示例）
+-- Regular user role -> user list permission only (example)
 INSERT IGNORE INTO `role_permission` (`role_id`, `permission_id`)
 SELECT r.id, p.id FROM `role` r JOIN `permission` p
 WHERE r.code = 'USER' AND p.code = 'user:list';
 
--- 默认 admin 账号（密码 admin123）
+-- Default admin account (password: admin123)
 INSERT IGNORE INTO `user` (`username`, `password`, `nickname`, `email`, `status`) VALUES
 ('admin', '$2a$10$vtpaH6dL9C5ZixsJ5m6hCeVJKsb/4IjFj1so..UtykTpmbwORhPVq', 'Admin', 'admin@example.com', 1);
 
--- admin 用户 → 管理员角色
+-- admin user -> administrator role
 INSERT IGNORE INTO `user_role` (`user_id`, `role_id`)
 SELECT u.id, r.id FROM `user` u JOIN `role` r
 WHERE u.username = 'admin' AND r.code = 'ADMIN';
 
 
 -- ============================================================
--- 第 5 周：通用 CRUD 示例（文章管理）+ 权限 + 种子数据
+-- Week 5: generic CRUD example (article management) + permissions + seed data
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS `article` (
-    `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `title`      VARCHAR(128) NOT NULL                COMMENT '标题',
-    `content`    TEXT                                  COMMENT '内容',
-    `author`     VARCHAR(64)  DEFAULT NULL            COMMENT '作者',
-    `status`     TINYINT      NOT NULL DEFAULT 1      COMMENT '状态：1 发布，0 草稿',
-    `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted`    TINYINT      NOT NULL DEFAULT 0      COMMENT '逻辑删除：0 未删除，1 已删除',
+    `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `title`      VARCHAR(128) NOT NULL                COMMENT 'title',
+    `content`    TEXT                                  COMMENT 'content',
+    `author`     VARCHAR(64)  DEFAULT NULL            COMMENT 'author',
+    `status`     TINYINT      NOT NULL DEFAULT 1      COMMENT 'status: 1 published, 0 draft',
+    `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
+    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated time',
+    `deleted`    TINYINT      NOT NULL DEFAULT 0      COMMENT 'logical delete: 0 not deleted, 1 deleted',
     PRIMARY KEY (`id`),
     KEY `idx_title` (`title`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '文章表（通用 CRUD 示例）';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'article table (generic CRUD example)';
 
--- 文章权限
+-- Article permissions
 INSERT IGNORE INTO `permission` (`name`, `code`, `type`, `sort`) VALUES
-('文章列表', 'article:list', 'API', 13),
-('文章新增', 'article:create', 'API', 14),
-('文章编辑', 'article:update', 'API', 15),
-('文章删除', 'article:delete', 'API', 16);
+('Article List', 'article:list', 'API', 13),
+('Article Create', 'article:create', 'API', 14),
+('Article Update', 'article:update', 'API', 15),
+('Article Delete', 'article:delete', 'API', 16);
 
--- 重新给 ADMIN 分配所有权限（含新增的 article 权限，幂等）
+-- Re-assign all permissions to ADMIN (including newly added article permissions, idempotent)
 INSERT IGNORE INTO `role_permission` (`role_id`, `permission_id`)
 SELECT r.id, p.id FROM `role` r JOIN `permission` p
 WHERE r.code = 'ADMIN';
 
--- 示例文章
+-- Sample articles
 INSERT IGNORE INTO `article` (`id`, `title`, `content`, `author`, `status`) VALUES
-(1, 'Spring Boot 后台管理模板使用指南', '这是一篇示例文章，展示通用 CRUD 模块的用法。', 'admin', 1),
-(2, '如何扩展自己的业务模块', '复制 article 模块，改表名和字段即可快速扩展商品、订单等模块。', 'admin', 1),
-(3, '草稿：RBAC 权限设计思路', '尚未发布的草稿。', 'admin', 0);
+(1, 'Getting Started with the Spring Boot Admin Template', 'A sample article demonstrating how the generic CRUD module works.', 'admin', 1),
+(2, 'How to Extend Your Own Business Module', 'Copy the article module, adjust the table and fields, and you can quickly scaffold products, orders, and more.', 'admin', 1),
+(3, 'Draft: RBAC Permission Design Notes', 'An unpublished draft.', 'admin', 0);

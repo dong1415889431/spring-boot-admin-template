@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 权限实体
+ * Permission entity.
  */
 @Data
 @TableName("permission")
@@ -20,10 +20,10 @@ public class Permission {
 
     private String name;
 
-    /** 权限编码，如 user:list */
+    /** Permission code, e.g. user:list. */
     private String code;
 
-    /** 类型：MENU / API / BUTTON */
+    /** Type: MENU / API / BUTTON. */
     private String type;
 
     private Integer sort;

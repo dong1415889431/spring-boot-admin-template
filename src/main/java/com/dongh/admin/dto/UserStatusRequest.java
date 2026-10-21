@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * 用户启禁用请求
+ * User enable/disable request.
  */
 @Data
 public class UserStatusRequest {

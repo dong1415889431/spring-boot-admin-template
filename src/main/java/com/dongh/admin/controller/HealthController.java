@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 健康检查接口（验证项目能跑通）
+ * Health check endpoint (verifies the project runs)
  */
 @RestController
 public class HealthController {

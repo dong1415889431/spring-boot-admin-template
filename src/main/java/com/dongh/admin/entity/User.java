@@ -10,9 +10,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 用户实体
+ * User entity.
  *
- * 说明：第 3 周只做认证，先建 user 表；role/permission 相关表第 4 周（RBAC）再补充。
+ * Note: Week 3 only covers authentication, so only the user table is created;
+ * the role/permission tables are added in Week 4 (RBAC).
  */
 @Data
 @TableName("user")
@@ -23,7 +24,7 @@ public class User {
 
     private String username;
 
-    /** 密码（BCrypt 加密），序列化时忽略，避免泄露 */
+    /** Password (BCrypt-encrypted), ignored during serialization to avoid leakage. */
     @JsonIgnore
     private String password;
 
@@ -31,14 +32,14 @@ public class User {
 
     private String email;
 
-    /** 状态：1 启用，0 禁用 */
+    /** Status: 1 enabled, 0 disabled. */
     private Integer status;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    /** 逻辑删除：0 未删除，1 已删除 */
+    /** Logical delete: 0 not deleted, 1 deleted. */
     @TableLogic
     private Integer deleted;
 }

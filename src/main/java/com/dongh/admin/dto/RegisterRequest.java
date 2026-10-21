@@ -6,20 +6,20 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * 注册请求
+ * Register request.
  */
 @Data
 public class RegisterRequest {
 
-    @NotBlank(message = "用户名不能为空")
-    @Size(min = 3, max = 64, message = "用户名长度需在 3-64 之间")
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 64, message = "Username must be 3-64 characters")
     private String username;
 
-    @NotBlank(message = "密码不能为空")
-    @Size(min = 6, max = 32, message = "密码长度需在 6-32 之间")
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, max = 32, message = "Password must be 6-32 characters")
     private String password;
 
-    @Email(message = "邮箱格式不正确")
+    @Email(message = "Invalid email format")
     private String email;
 
     private String nickname;

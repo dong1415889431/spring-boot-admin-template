@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 角色管理接口（RBAC 权限控制）
+ * Role management endpoints (RBAC permission control)
  */
-@Tag(name = "角色管理", description = "角色增删改查与权限分配")
+@Tag(name = "Role Management", description = "Role CRUD and permission assignment")
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {
@@ -34,28 +34,28 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @Operation(summary = "角色列表")
+    @Operation(summary = "Role list")
     @PreAuthorize("hasAuthority('role:list')")
     @GetMapping
     public Result<List<Role>> list() {
         return Result.success(roleService.listAll());
     }
 
-    @Operation(summary = "新增角色")
+    @Operation(summary = "Create role")
     @PreAuthorize("hasAuthority('role:create')")
     @PostMapping
     public Result<Role> create(@Valid @RequestBody RoleRequest request) {
         return Result.success(roleService.createRole(request));
     }
 
-    @Operation(summary = "编辑角色")
+    @Operation(summary = "Update role")
     @PreAuthorize("hasAuthority('role:update')")
     @PutMapping("/{id}")
     public Result<Role> update(@PathVariable Long id, @Valid @RequestBody RoleRequest request) {
         return Result.success(roleService.updateRole(id, request));
     }
 
-    @Operation(summary = "删除角色")
+    @Operation(summary = "Delete role")
     @PreAuthorize("hasAuthority('role:delete')")
     @DeleteMapping("/{id}")
     public Result<Void> delete(@PathVariable Long id) {
@@ -63,7 +63,7 @@ public class RoleController {
         return Result.success();
     }
 
-    @Operation(summary = "分配权限")
+    @Operation(summary = "Assign permissions")
     @PreAuthorize("hasAuthority('role:assign-permission')")
     @PutMapping("/{id}/permissions")
     public Result<Void> assignPermissions(@PathVariable Long id, @RequestBody RolePermissionRequest request) {
@@ -71,7 +71,7 @@ public class RoleController {
         return Result.success();
     }
 
-    @Operation(summary = "查询角色权限")
+    @Operation(summary = "Get role permissions")
     @PreAuthorize("hasAuthority('role:list')")
     @GetMapping("/{id}/permissions")
     public Result<List<Long>> getPermissions(@PathVariable Long id) {

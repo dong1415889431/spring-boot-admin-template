@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * JWT 工具类单元测试（纯逻辑，无需 Spring 上下文）
+ * JWT utility unit test (pure logic, no Spring context required)
  */
 class JwtUtilTest {
 

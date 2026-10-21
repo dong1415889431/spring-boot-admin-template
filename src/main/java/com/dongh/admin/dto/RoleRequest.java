@@ -4,19 +4,19 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 角色创建 / 更新请求
+ * Role create / update request.
  */
 @Data
 public class RoleRequest {
 
-    @NotBlank(message = "角色名不能为空")
+    @NotBlank(message = "Role name is required")
     private String name;
 
-    @NotBlank(message = "角色编码不能为空")
+    @NotBlank(message = "Role code is required")
     private String code;
 
     private String description;
 
-    /** 状态：1 启用，0 禁用 */
+    /** Status: 1 enabled, 0 disabled. */
     private Integer status;
 }

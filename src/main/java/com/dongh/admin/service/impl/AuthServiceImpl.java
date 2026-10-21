@@ -17,12 +17,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 认证服务实现
+ * Authentication service implementation
  */
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    /** 登录态缓存 key 前缀 */
+    /** Login-state cache key prefix */
     private static final String LOGIN_KEY_PREFIX = "login:user:";
 
     private final UserService userService;
@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse register(RegisterRequest request) {
         if (userService.existsByUsername(request.getUsername())) {
-            throw new BusinessException(ResultCode.CONFLICT, "用户名已存在");
+            throw new BusinessException(ResultCode.CONFLICT, "Username already exists");
         }
         User user = userService.register(request, passwordEncoder);
         return buildAuthResponse(user);
@@ -56,10 +56,10 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(LoginRequest request) {
         User user = userService.getByUsername(request.getUsername());
         if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BusinessException(ResultCode.UNAUTHORIZED, "用户名或密码错误");
+            throw new BusinessException(ResultCode.UNAUTHORIZED, "Invalid username or password");
         }
         if (user.getStatus() != null && user.getStatus() == 0) {
-            throw new BusinessException(ResultCode.FORBIDDEN, "账号已被禁用");
+            throw new BusinessException(ResultCode.FORBIDDEN, "Account is disabled");
         }
         return buildAuthResponse(user);
     }
@@ -67,25 +67,25 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse refresh(String refreshToken) {
         if (!jwtUtil.isValid(refreshToken) || !jwtUtil.isRefreshToken(refreshToken)) {
-            throw new BusinessException(ResultCode.UNAUTHORIZED, "refreshToken 无效或已过期");
+            throw new BusinessException(ResultCode.UNAUTHORIZED, "refreshToken is invalid or expired");
         }
         User user = userService.getByUsername(jwtUtil.getUsername(refreshToken));
         if (user == null) {
-            throw new BusinessException(ResultCode.UNAUTHORIZED, "用户不存在");
+            throw new BusinessException(ResultCode.UNAUTHORIZED, "User not found");
         }
         return buildAuthResponse(user);
     }
 
     @Override
     public AuthResponse.UserInfo getCurrentUser(String username) {
-        // 优先读登录态缓存，miss 再查库
+        // Read the login-state cache first; fall back to the database on a miss
         AuthResponse.UserInfo cached = redisService.get(LOGIN_KEY_PREFIX + username, AuthResponse.UserInfo.class);
         if (cached != null) {
             return cached;
         }
         User user = userService.getByUsername(username);
         if (user == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "用户不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "User not found");
         }
         return toUserInfo(user);
     }
@@ -96,10 +96,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private AuthResponse buildAuthResponse(User user) {
-        // 登录/刷新时实时查询用户权限编码，写入 access token
+        // Query permission codes in real time on login/refresh and embed them in the access token
         List<String> permissions = permissionMapper.selectPermissionCodesByUserId(user.getId());
         AuthResponse.UserInfo userInfo = toUserInfo(user);
-        // 登录态缓存：缓存用户信息，TTL 与 access token 一致
+        // Login-state cache: cache the user info with the same TTL as the access token
         redisService.set(LOGIN_KEY_PREFIX + user.getUsername(), userInfo, jwtUtil.getAccessExpiration());
         return AuthResponse.builder()
                 .accessToken(jwtUtil.generateAccessToken(user.getUsername(), permissions))

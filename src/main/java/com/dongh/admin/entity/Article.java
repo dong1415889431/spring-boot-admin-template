@@ -9,10 +9,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 文章实体（通用 CRUD 示例）
+ * Article entity (generic CRUD example).
  *
- * 买家照抄本模块（entity/mapper/service/controller + 一张表），
- * 即可快速扩展出商品、订单、公告等任意业务模块。
+ * Buyers can copy this module (entity/mapper/service/controller + one table)
+ * to quickly build out any business module such as products, orders, or announcements.
  */
 @Data
 @TableName("article")
@@ -27,7 +27,7 @@ public class Article {
 
     private String author;
 
-    /** 状态：1 发布，0 草稿 */
+    /** Status: 1 published, 0 draft. */
     private Integer status;
 
     private LocalDateTime createdAt;

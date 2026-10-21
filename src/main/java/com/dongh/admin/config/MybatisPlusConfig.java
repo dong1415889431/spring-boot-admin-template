@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * MyBatis-Plus 配置：分页插件
+ * MyBatis-Plus configuration: pagination plugin.
  */
 @Configuration
 public class MybatisPlusConfig {

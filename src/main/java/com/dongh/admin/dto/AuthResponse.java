@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 认证响应：登录/注册/刷新后返回 token 与用户信息
+ * Authentication response: returns tokens and user info after login/register/refresh.
  */
 @Data
 @Builder
@@ -14,10 +14,10 @@ public class AuthResponse {
 
     private String refreshToken;
 
-    /** 固定为 Bearer，配合请求头 Authorization: Bearer <token> */
+    /** Always "Bearer", used with the Authorization: Bearer <token> header. */
     private String tokenType;
 
-    /** access token 有效期（秒） */
+    /** Access token validity period (seconds). */
     private long expiresIn;
 
     private UserInfo user;

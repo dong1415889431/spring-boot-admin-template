@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * 全局异常处理：统一错误返回格式
+ * Global exception handler: unified error response format.
  */
 @Slf4j
 @RestControllerAdvice
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public Result<Void> handleException(Exception e) {
-        log.error("系统异常", e);
+        log.error("System error", e);
         return Result.error(ResultCode.ERROR);
     }
 }

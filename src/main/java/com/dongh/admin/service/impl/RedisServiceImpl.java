@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Redis 缓存服务实现
+ * Redis cache service implementation.
  *
- * 用 StringRedisTemplate 存 JSON 字符串，读写都走 ObjectMapper 序列化/反序列化，
- * 避免直接存对象带来的类型丢失问题。
+ * Stores JSON strings via StringRedisTemplate and serializes/deserializes with
+ * ObjectMapper to avoid type loss from storing objects directly.
  */
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class RedisServiceImpl implements RedisService {
             String json = objectMapper.writeValueAsString(value);
             stringRedisTemplate.opsForValue().set(key, json, timeoutSeconds, TimeUnit.SECONDS);
         } catch (JsonProcessingException e) {
-            throw new BusinessException(ResultCode.ERROR, "缓存序列化失败");
+            throw new BusinessException(ResultCode.ERROR, "Cache serialization failed");
         }
     }
 
@@ -43,7 +43,7 @@ public class RedisServiceImpl implements RedisService {
         try {
             return objectMapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {
-            throw new BusinessException(ResultCode.ERROR, "缓存反序列化失败");
+            throw new BusinessException(ResultCode.ERROR, "Cache deserialization failed");
         }
     }
 

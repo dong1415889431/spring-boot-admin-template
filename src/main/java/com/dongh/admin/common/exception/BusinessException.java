@@ -3,7 +3,7 @@ package com.dongh.admin.common.exception;
 import com.dongh.admin.common.ResultCode;
 
 /**
- * 业务异常
+ * Business exception.
  */
 public class BusinessException extends RuntimeException {
 

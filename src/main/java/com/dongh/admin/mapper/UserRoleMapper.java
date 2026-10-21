@@ -8,18 +8,18 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 用户-角色关联 Mapper
+ * User-role association mapper.
  */
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 
     /**
-     * 查询用户拥有的角色 ID 列表
+     * Query the role IDs assigned to a user.
      */
     @Select("SELECT ur.role_id FROM user_role ur WHERE ur.user_id = #{userId}")
     List<Long> selectRoleIdsByUserId(@Param("userId") Long userId);
 
     /**
-     * 查询用户拥有的角色名列表
+     * Query the role names assigned to a user.
      */
     @Select("SELECT r.name FROM role r JOIN user_role ur ON r.id = ur.role_id " +
             "WHERE ur.user_id = #{userId} AND r.deleted = 0")

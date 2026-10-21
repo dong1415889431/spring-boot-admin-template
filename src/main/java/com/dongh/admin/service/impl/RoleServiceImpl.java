@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 角色服务实现
+ * Role service implementation
  */
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public Role createRole(RoleRequest request) {
         if (lambdaQuery().eq(Role::getCode, request.getCode()).exists()) {
-            throw new BusinessException(ResultCode.CONFLICT, "角色编码已存在");
+            throw new BusinessException(ResultCode.CONFLICT, "Role code already exists");
         }
         Role role = new Role();
         role.setName(request.getName());
@@ -51,14 +51,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public Role updateRole(Long id, RoleRequest request) {
         Role role = getById(id);
         if (role == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "角色不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "Role not found");
         }
         boolean codeTaken = lambdaQuery()
                 .eq(Role::getCode, request.getCode())
                 .ne(Role::getId, id)
                 .exists();
         if (codeTaken) {
-            throw new BusinessException(ResultCode.CONFLICT, "角色编码已存在");
+            throw new BusinessException(ResultCode.CONFLICT, "Role code already exists");
         }
         role.setName(request.getName());
         role.setCode(request.getCode());
@@ -74,9 +74,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Transactional
     public void deleteRole(Long id) {
         if (getById(id) == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "角色不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "Role not found");
         }
-        // 清理关联数据，再逻辑删除角色
+        // Clean up related data first, then logically delete the role
         rolePermissionMapper.delete(new LambdaQueryWrapper<RolePermission>().eq(RolePermission::getRoleId, id));
         userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getRoleId, id));
         removeById(id);
@@ -86,7 +86,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Transactional
     public void assignPermissions(Long roleId, List<Long> permissionIds) {
         if (getById(roleId) == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "角色不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "Role not found");
         }
         rolePermissionMapper.delete(new LambdaQueryWrapper<RolePermission>().eq(RolePermission::getRoleId, roleId));
         if (permissionIds != null) {

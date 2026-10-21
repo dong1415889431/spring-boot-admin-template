@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * 文章服务实现（通用 CRUD 示例）
+ * Article service implementation (generic CRUD example)
  */
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
@@ -48,7 +48,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Article updateArticle(Long id, ArticleRequest request) {
         Article article = getById(id);
         if (article == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "文章不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "Article not found");
         }
         article.setTitle(request.getTitle());
         article.setContent(request.getContent());
@@ -63,7 +63,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public void deleteArticle(Long id) {
         if (getById(id) == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "文章不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "Article not found");
         }
         removeById(id);
     }

@@ -5,7 +5,7 @@ import com.dongh.admin.dto.LoginRequest;
 import com.dongh.admin.dto.RegisterRequest;
 
 /**
- * 认证服务：注册 / 登录 / 刷新 token / 当前用户
+ * Authentication service: register / login / refresh token / current user
  */
 public interface AuthService {
 

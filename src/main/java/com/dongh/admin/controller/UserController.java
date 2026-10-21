@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 用户管理接口（RBAC 权限控制）
+ * User management endpoints (RBAC permission control)
  */
-@Tag(name = "用户管理", description = "用户分页查询、编辑、启禁用、删除与角色分配")
+@Tag(name = "User Management", description = "Paginated user query, update, enable/disable, delete, and role assignment")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -36,7 +36,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "分页查询用户")
+    @Operation(summary = "Paginated user query")
     @PreAuthorize("hasAuthority('user:list')")
     @GetMapping
     public Result<IPage<UserVO>> page(@RequestParam(defaultValue = "1") long page,
@@ -45,7 +45,7 @@ public class UserController {
         return Result.success(userService.pageUsers(page, size, keyword));
     }
 
-    @Operation(summary = "编辑用户")
+    @Operation(summary = "Update user")
     @PreAuthorize("hasAuthority('user:update')")
     @PutMapping("/{id}")
     public Result<Void> update(@PathVariable Long id, @RequestBody UserUpdateRequest request) {
@@ -53,7 +53,7 @@ public class UserController {
         return Result.success();
     }
 
-    @Operation(summary = "启用 / 禁用用户")
+    @Operation(summary = "Enable / disable user")
     @PreAuthorize("hasAuthority('user:status')")
     @PutMapping("/{id}/status")
     public Result<Void> updateStatus(@PathVariable Long id, @Valid @RequestBody UserStatusRequest request) {
@@ -61,7 +61,7 @@ public class UserController {
         return Result.success();
     }
 
-    @Operation(summary = "删除用户")
+    @Operation(summary = "Delete user")
     @PreAuthorize("hasAuthority('user:delete')")
     @DeleteMapping("/{id}")
     public Result<Void> delete(@PathVariable Long id) {
@@ -69,7 +69,7 @@ public class UserController {
         return Result.success();
     }
 
-    @Operation(summary = "分配角色")
+    @Operation(summary = "Assign roles")
     @PreAuthorize("hasAuthority('user:assign-role')")
     @PutMapping("/{id}/roles")
     public Result<Void> assignRoles(@PathVariable Long id, @RequestBody UserRoleRequest request) {
@@ -77,7 +77,7 @@ public class UserController {
         return Result.success();
     }
 
-    @Operation(summary = "查询用户角色")
+    @Operation(summary = "Get user roles")
     @PreAuthorize("hasAuthority('user:list')")
     @GetMapping("/{id}/roles")
     public Result<List<Long>> getRoles(@PathVariable Long id) {

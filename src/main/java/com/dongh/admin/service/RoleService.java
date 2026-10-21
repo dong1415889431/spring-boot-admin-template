@@ -7,7 +7,7 @@ import com.dongh.admin.entity.Role;
 import java.util.List;
 
 /**
- * 角色服务
+ * Role service
  */
 public interface RoleService extends IService<Role> {
 

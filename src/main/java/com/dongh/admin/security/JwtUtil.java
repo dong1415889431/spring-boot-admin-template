@@ -15,10 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * JWT 工具类（jjwt 0.12.x）
+ * JWT utility (jjwt 0.12.x).
  *
- * 生成 / 解析 access token 与 refresh token，用 claim 中的 type 区分。
- * access token 额外携带权限编码（permissions claim），供 RBAC 鉴权使用。
+ * Generates / parses access and refresh tokens, distinguished by the type claim.
+ * Access tokens additionally carry permission codes (permissions claim) for RBAC authorization.
  */
 @Component
 public class JwtUtil {

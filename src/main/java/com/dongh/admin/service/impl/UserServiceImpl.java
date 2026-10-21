@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 用户服务实现
+ * User service implementation
  */
 @Service
 @RequiredArgsConstructor
@@ -77,7 +77,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateUser(Long id, UserUpdateRequest request) {
         User user = getById(id);
         if (user == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "用户不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "User not found");
         }
         user.setNickname(request.getNickname());
         user.setEmail(request.getEmail());
@@ -88,7 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateStatus(Long id, Integer status) {
         User user = getById(id);
         if (user == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "用户不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "User not found");
         }
         user.setStatus(status);
         updateById(user);
@@ -98,7 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional
     public void deleteUser(Long id) {
         if (getById(id) == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "用户不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "User not found");
         }
         userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, id));
         removeById(id);
@@ -108,7 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional
     public void assignRoles(Long userId, List<Long> roleIds) {
         if (getById(userId) == null) {
-            throw new BusinessException(ResultCode.NOT_FOUND, "用户不存在");
+            throw new BusinessException(ResultCode.NOT_FOUND, "User not found");
         }
         userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, userId));
         if (roleIds != null) {

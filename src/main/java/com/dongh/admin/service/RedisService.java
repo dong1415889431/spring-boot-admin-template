@@ -1,21 +1,21 @@
 package com.dongh.admin.service;
 
 /**
- * Redis 缓存服务（第 5 周接入）
+ * Redis cache service (introduced in week 5).
  *
- * 封装常用缓存操作，买家可在任意业务中注入使用。
+ * Wraps common cache operations; buyers can inject and use it in any business logic.
  */
 public interface RedisService {
 
-    /** 写入缓存，带过期时间（秒） */
+    /** Write to cache with an expiration time (seconds) */
     void set(String key, Object value, long timeoutSeconds);
 
-    /** 读取缓存并反序列化为指定类型，不存在返回 null */
+    /** Read from cache and deserialize to the given type; returns null if absent */
     <T> T get(String key, Class<T> clazz);
 
-    /** 删除缓存 */
+    /** Delete a cache entry */
     boolean delete(String key);
 
-    /** 判断 key 是否存在 */
+    /** Check whether a key exists */
     boolean hasKey(String key);
 }

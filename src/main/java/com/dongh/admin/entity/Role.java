@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 角色实体
+ * Role entity.
  */
 @Data
 @TableName("role")
@@ -20,12 +20,12 @@ public class Role {
 
     private String name;
 
-    /** 角色编码，如 ADMIN / USER */
+    /** Role code, e.g. ADMIN / USER. */
     private String code;
 
     private String description;
 
-    /** 状态：1 启用，0 禁用 */
+    /** Status: 1 enabled, 0 disabled. */
     private Integer status;
 
     private LocalDateTime createdAt;

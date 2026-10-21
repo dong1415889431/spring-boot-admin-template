@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * 角色-权限关联实体
+ * Role-permission association entity.
  */
 @Data
 @TableName("role_permission")
