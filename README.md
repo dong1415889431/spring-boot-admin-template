@@ -183,6 +183,8 @@ bash scripts/smoke-test.sh
 
 ## 🎬 Demo
 
+![Demo](demo.gif)
+
 The `scripts/demo.sh` script walks through the whole flow (health → login → article CRUD → permission denial → logout) with readable output. Record it as a terminal screencast with [asciinema](https://asciinema.org/):
 
 ```bash
