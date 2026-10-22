@@ -193,6 +193,30 @@ asciinema rec demo.cast -c "bash scripts/demo.sh"
 
 Then embed the resulting `.cast` file in your docs, or convert it to a GIF with `agg` / `svg-term`.
 
+## 💰 Free vs Paid Edition
+
+This repository is the **free open-source edition** — auth, RBAC, generic CRUD, Redis, and Docker deployment: everything you need to run a production-ready admin backend.
+
+The **paid edition** adds enterprise features on top:
+
+| Feature | Free | Paid |
+|---|---|---|
+| Authentication + JWT | ✅ | ✅ |
+| RBAC permissions | ✅ | ✅ |
+| Generic CRUD example | ✅ | ✅ |
+| Redis caching | ✅ | ✅ |
+| Docker one-command deploy | ✅ | ✅ |
+| Swagger / OpenAPI docs | ✅ | ✅ |
+| Code generator | — | ✅ |
+| Audit log | — | ✅ |
+| File upload | — | ✅ |
+
+### 🛒 Get the Full Version
+
+The paid edition (code generator, audit log, file upload) will be available on Gumroad soon.
+
+[Get it on Gumroad →](https://gumroad.com/l/spring-boot-admin-template)
+
 ## 🗺 Roadmap
 
 - [x] Auth (register / login / JWT)
@@ -200,7 +224,7 @@ Then embed the resulting `.cast` file in your docs, or convert it to a GIF with 
 - [x] Generic CRUD example + Redis
 - [x] Docker one-command deployment
 - [x] English docs + regression tests
-- [ ] Code generator, audit log, file upload (paid edition)
+- [ ] Code generator, audit log, file upload (paid edition — coming soon)
 
 ## 📄 License
 
